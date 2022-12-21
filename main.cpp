@@ -13,16 +13,16 @@ int main() {
 	h = 1. / (n - 1);
 	
 	shooting(n, C, alph);
-	RungeKutta();
+	// RungeKutta();
 
 	out = fopen("res.txt", "w");
 	func = fopen("targ.txt", "w");
 
 	max_rate = 0;
 
-	for (int i = 0; i < n; i ++) {
-		fprintf(out, "%lf %lf\n", i*h, u[0][i]);
-	}
+	// for (int i = 0; i < n; i ++) {
+	// 	fprintf(out, "%lf %lf\n", i*h, u[0][i]);
+	// }
 
 	fclose(out);
 	fclose(func);
@@ -34,19 +34,19 @@ int main() {
 
 Vector f(double t, Vector k) {
 	Vector KK;
-    KK.x1 = k.x2;
-	KK.x2 = k.x3;
-	KK.x3 = -k.x4;
-	KK.x4 = exp(-ALPHA * pow(k.x1, 2)) * (1 - 2 * ALPHA * pow(k.x1, 2));
+    KK.x[0] = k.x[1];
+	KK.x[1] = k.x[2];
+	KK.x[2] = -k.x[3];
+	KK.x[3] = exp(-ALPHA * pow(k.x[0], 2)) * (1 - 2 * ALPHA * pow(k.x[0], 2));
     return KK;
 }
 
 Vector vec2Vec(vector<double> v) {
     Vector V;
-    V.x1 = v[0];
-    V.x2 = v[1];
-    V.x3 = v[2];
-    V.x4 = v[3];
+    V.x[0] = v[0];
+    V.x[1] = v[1];
+    V.x[2] = v[2];
+    V.x[3] = v[3];
     return V;
 }
 
@@ -58,13 +58,14 @@ void RungeKutta(int n, vector<vector<double> > &x, double C1, double C2, double 
     bool sw = 0;
 	
 	x[0].push_back(0);
-    x[1].push_back(C1);
-    x[2].push_back(0);
-    x[3].push_back(C2);
+    x[0].push_back(C1);
+    x[0].push_back(0);
+    x[0].push_back(C2);
     
-    while(pos + h < M_PI / 2.) { // надо заменить в классе x1, x2,... на x[i]
+    while(M_PI / 2. - pos > EPS) { // надо заменить в классе x[0], x[1],... на x[i]
 
         step ++;
+        sw = 0;
 
         buf = vec2Vec(x[x.size() - 1]);
 
@@ -89,8 +90,19 @@ void RungeKutta(int n, vector<vector<double> > &x, double C1, double C2, double 
                     sw = 1;
                 }
             }
+
+            if (pos + h > M_PI / 2.) {
+                h = M_PI / 2. - pos;
+                sw = 0;
+            }
+
         } while (sw == 0);
-        
+
+        for (int i = 0; i < 4; i ++) {
+            x[step].push_back(x[step - 1][i] + 1. / 336. * (14*k[1].x[i] + 35*k[4].x[i] + 162*k[5].x[i] + 125*k[6].x[i]));
+        }
+
+        pos += h;
     }
 }
 

@@ -4,7 +4,7 @@ class Vector
 {
 	public:
 
-    double x1, x2, x3, x4;
+    double x[4];
 	Vector();
 	Vector(double xx, double yy, double zz, double ww);
 	Vector(const Vector &v);
