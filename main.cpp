@@ -38,7 +38,7 @@ Vector f(double t, Vector k) {
 	KK.x2 = k.x3;
 	KK.x3 = -k.x4;
 	KK.x4 = exp(-ALPHA * pow(k.x1, 2)) * (1 - 2 * ALPHA * pow(k.x1, 2));
-    return K;
+    return KK;
 }
 
 Vector vec2Vec(vector<double> v) {
@@ -53,28 +53,44 @@ Vector vec2Vec(vector<double> v) {
 void RungeKutta(int n, vector<vector<double> > &x, double C1, double C2, double alph) {
     Vector k[6], buf(0, C1, 0, C2), E;
     double pos = 0;
-	double h = 1. / 20.;
+	double h = 1. / 100.;
     int step = 0;
+    bool sw = 0;
 	
 	x[0].push_back(0);
     x[1].push_back(C1);
     x[2].push_back(0);
     x[3].push_back(C2);
     
-    while(pos + h < M_PI / 2.) {
+    while(pos + h < M_PI / 2.) { // надо заменить в классе x1, x2,... на x[i]
 
         step ++;
 
         buf = vec2Vec(x[x.size() - 1]);
 
-        k[0] = f(pos, buf);
-        k[1] = f(pos + 1 / 2. * h, buf + (1 / 2.) * k[0]);
-        k[2] = f(pos + 1 / 2. * h, buf + (1 / 4.) * (k[0] + k[1]));
-        k[3] = f(pos + h, buf + (-1)*k[1] + 2*k[2]);
-        k[4] = f(pos + 2 / 3. * h, buf + (1 / 27.) * (7*k[0] + 10*k[1] + k[3]));
-        k[5] = f(pos + 1 / 5. * h, buf + (1 / 625.) * (28*k[0] + -125*k[1] + 546*k[2] + 54*k[3] + -378*k[4]));
+        do {
+            k[0] = f(pos, buf);
+            k[1] = f(pos + 1 / 2. * h, buf + (1 / 2.) * k[0]);
+            k[2] = f(pos + 1 / 2. * h, buf + (1 / 4.) * (k[0] + k[1]));
+            k[3] = f(pos + h, buf + (-1)*k[1] + 2*k[2]);
+            k[4] = f(pos + 2 / 3. * h, buf + (1 / 27.) * (7*k[0] + 10*k[1] + k[3]));
+            k[5] = f(pos + 1 / 5. * h, buf + (1 / 625.) * (28*k[0] + -125*k[1] + 546*k[2] + 54*k[3] + -378*k[4]));
 
-        E = (1 / 336.) * (-42*k[0] + -224*k[2] + -21*k[3] + 162*k[5] + 125*k[6]);
+            E = (1 / 336.) * (-42*k[0] + -224*k[2] + -21*k[3] + 162*k[5] + 125*k[6]);
+
+            for (int i = 0; i < 4; i ++) {
+                if (E.x[i] < EPS / K) {
+                    h *= 2;
+                    break;
+                } else if (E.x[i] > EPS) {
+                    h /= 2;
+                    break;
+                } else {
+                    sw = 1;
+                }
+            }
+        } while (sw == 0);
+        
     }
 }
 
