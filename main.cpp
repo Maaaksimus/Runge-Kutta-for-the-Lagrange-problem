@@ -1,4 +1,5 @@
 #include "mylib.h"
+#include "MyVector.h"
 
 int main() {
 	FILE *out, *func;
@@ -11,8 +12,8 @@ int main() {
 	return 0;
 }
 
-Vector f(double t, Vector k, double alph) {
-	Vector KK;
+MyVector f(double t, MyVector k, double alph) {
+	MyVector KK;
     KK.x[0] = k.x[1];
 	KK.x[1] = k.x[2];
 	KK.x[2] = -k.x[3];
@@ -20,8 +21,8 @@ Vector f(double t, Vector k, double alph) {
     return KK;
 }
 
-Vector vec2Vec(vector<double> v) {
-    Vector V;
+MyVector vec2Vec(vector<double> v) {
+    MyVector V;
     V.x[0] = v[0];
     V.x[1] = v[1];
     V.x[2] = v[2];
@@ -30,7 +31,7 @@ Vector vec2Vec(vector<double> v) {
 }
 
 void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
-    Vector k[6], buf(0, C1, 0, C2), E;
+    MyVector k[6], buf(0, C1, 0, C2), E;
     double pos = 0;
 	double h = 1. / 100.;
     int step = 0;

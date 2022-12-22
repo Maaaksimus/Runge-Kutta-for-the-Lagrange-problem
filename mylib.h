@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "Vector.h"
+#include "MyVector.h"
 
 #define EPS 1e-7
 #define C_1_default M_PI / 4. // начальные значения, которые надо рассчитать
@@ -13,9 +13,9 @@
 
 using namespace std;
 
-Vector f(double t, Vector k);
-Vector vec2Vec(vector<double> v);
+MyVector f(double t, MyVector k, double alph);
+MyVector vec2Vec(vector<double> v);
 
-void RungeKutta(int n, vector<vector<double> > &x, double C1, double C2, double alph);
-void shooting(int n, double *C, double alph);
+void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph);
+void shooting(double *C, double alph);
 void invJac(double J[2][2]);
