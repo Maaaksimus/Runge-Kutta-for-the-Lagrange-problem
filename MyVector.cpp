@@ -1,4 +1,5 @@
 #include "MyVector.h"
+#include <iostream>
 
 MyVector::MyVector()
 {
@@ -11,6 +12,10 @@ MyVector::MyVector(double xx, double yy, double zz, double ww)
 MyVector::MyVector(const MyVector &v)
 {
 	x[0] = v.x[0]; x[1] = v.x[1]; x[2] = v.x[2];
+}
+
+void MyVector::print() {
+	std::cout << "[" << x[0] << ", " << x[1] << ", " << x[2] << ", " << x[3] << "]" << std::endl;
 }
 
 double operator*(const MyVector &a, const MyVector &b)

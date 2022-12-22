@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 class MyVector
 {
 	public:
@@ -9,6 +7,8 @@ class MyVector
 	MyVector(double xx, double yy, double zz, double ww);
 	MyVector(const MyVector &v);
 	~MyVector() = default;
+
+	void print();
 
 	friend double operator*(const MyVector &a, const MyVector &b);
 	friend MyVector operator+(const MyVector &a, const MyVector &b);
