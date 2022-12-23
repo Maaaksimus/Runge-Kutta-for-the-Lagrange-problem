@@ -48,12 +48,12 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
 
         step ++;
         sw = 0;
-        cout << "t2" << endl;
+        // cout << "t2" << endl;
 
-        cout << x.size() - 1 << endl;
+        // cout << x.size() - 1 << endl;
         buf = vec2Vec(x[x.size() - 1]);
 
-        cout << "t3" << endl;
+        // cout << "t3" << endl;
 
         do {
             k[0] = h*f(pos, buf, alph);
@@ -85,7 +85,7 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
                 }
             }
 
-            out << "h: " << h << " " << E.x[0] << " "<< E.x[1] << " "<< E.x[2] << " "<< E.x[3] << endl;
+            out << "h: " << h << " " << E.x[0] << " "<< E.x[1] << " "<< E.x[2] << " "<< E.x[3] << " pos " << pos << endl;
 
             if (pos + h > M_PI / 2.) {
                 h = M_PI / 2. - pos;
@@ -94,7 +94,7 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
 
         } while (sw == 0);
 
-        cout << "t6" << endl;
+        // cout << "t6" << endl;
 
         vector<double> v;
         x.push_back(v);
@@ -104,8 +104,11 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
             x[step].push_back(x[step - 1][i] + 1. / 336. * (14*k[1].x[i] + 35*k[4].x[i] + 162*k[5].x[i] + 125*k[6].x[i]));
         }
 
+        // cout << "priv pos " << pos << endl;
         pos += h;
+        // cout << "pos " << pos << endl;
     }
+    cout << "out" << endl;
 }
 
 void shooting(double *C, double alph) { // method "ready"
@@ -127,9 +130,11 @@ void shooting(double *C, double alph) { // method "ready"
             prev[1] = C[1];
 
             RungeKutta(x_from_r, C[0] - EPS, C[1], a);
+            cout << "where are you?" << endl;
             RungeKutta(x_from_l, C[0] + EPS, C[1], a);
-            Jac_F[0][0] = (x_from_l[0][x_from_l.size() - 1] - x_from_r[0][x_from_r.size() - 1]) / EPS / 2.;
-            Jac_F[0][1] = (x_from_l[2][x_from_l.size() - 1] - x_from_r[2][x_from_r.size() - 1]) / EPS / 2.;
+            cout << "here?" << endl;
+            Jac_F[0][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / EPS / 2.;
+            Jac_F[0][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / EPS / 2.;
 
             for (int i = 0; i < 4; i ++) {
                 x_from_l[i].clear();
@@ -138,14 +143,14 @@ void shooting(double *C, double alph) { // method "ready"
 
             RungeKutta(x_from_r, C[0], C[1] - EPS, a);
             RungeKutta(x_from_l, C[0], C[1] + EPS, a);
-            Jac_F[1][0] = (x_from_l[0][x_from_l.size() - 1] - x_from_r[0][x_from_r.size() - 1]) / EPS / 2.;
-            Jac_F[1][1] = (x_from_l[2][x_from_l.size() - 1] - x_from_r[2][x_from_r.size() - 1]) / EPS / 2.;
+            Jac_F[1][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / EPS / 2.;
+            Jac_F[1][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / EPS / 2.;
 
             invJac(Jac_F);
             RungeKutta(x, C[0], C[1], a);
 
-            C[0] -= Jac_F[0][0]*x[0][x.size() - 1] + Jac_F[0][1]*x[2][x.size() - 1];
-            C[1] -= Jac_F[1][0]*x[0][x.size() - 1] + Jac_F[1][1]*x[2][x.size() - 1];
+            C[0] -= Jac_F[0][0]*x[x.size() - 1][0] + Jac_F[0][1]*x[x.size() - 1][2];
+            C[1] -= Jac_F[1][0]*x[x.size() - 1][0] + Jac_F[1][1]*x[x.size() - 1][2];
         } while(sqrt((C[0] - prev[0])*(C[0] - prev[0]) + (C[1] - prev[1])*(C[1] - prev[1])) > 1e-10);
     }
 }
