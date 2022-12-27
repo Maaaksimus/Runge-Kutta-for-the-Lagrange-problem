@@ -9,6 +9,7 @@ class MyVector
 	~MyVector() = default;
 
 	void print();
+	double norm();
 
 	friend double operator*(const MyVector &a, const MyVector &b);
 	friend MyVector operator+(const MyVector &a, const MyVector &b);

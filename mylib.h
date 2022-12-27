@@ -6,9 +6,9 @@
 #include <fstream>
 #include "MyVector.h"
 
-#define EPS 1e-2
-#define C_1_default M_PI / 4. // начальные значения, которые надо рассчитать
-#define C_2_default (1 - pow(M_PI, 4) / 12.) / M_PI * 2 // -----//-----
+#define EPS 1e-3
+#define C_1_default -(pow(M_PI, 4) / 384. - 2) / M_PI// -----//-----
+#define C_2_default -1 * M_PI / 4. // начальные значения, которые надо рассчитать
 #define ALPHA 0
 #define K 32
 

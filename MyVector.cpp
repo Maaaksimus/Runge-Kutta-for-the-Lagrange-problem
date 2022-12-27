@@ -1,5 +1,6 @@
 #include "MyVector.h"
 #include <iostream>
+#include <cmath>
 
 MyVector::MyVector()
 {
@@ -42,4 +43,12 @@ const MyVector & MyVector::operator=(const MyVector &b)
 {
 	x[0] = b.x[0]; x[1] = b.x[1]; x[2] = b.x[2], x[3] = b.x[3];
 	return *this;
+}
+
+double MyVector::norm() {
+	double s = 0;
+	for (int i = 0; i < 4; i ++) {
+		s += x[i]*x[i];
+	}
+	return sqrt(s);
 }
