@@ -5,17 +5,18 @@ int main() {
 	vector<vector<double> > x;
 	double h, err_rate = 0, solve_rate = 0, C[2], alph = ALPHA, t;
 
-	// shooting(C, alph);
+	shooting(C, alph);
+    cout << C[0] << " " << C[1] << endl;
 	cout << "t1" << endl;
     // RungeKutta(x, C[0], C[1], alph);
-    RungeKutta(x, C_1_default, C_2_default, alph);
+    // RungeKutta(x, C_1_default, C_2_default, alph);
 
-    for (int i = 0; i < 4; i ++) {
-        cout << x[x.size() - 1][i] << " ";
-    }
+    // for (int i = 0; i < 4; i ++) {
+    //     cout << x[x.size() - 1][i] << " ";
+    // }
 
-    t = M_PI / 2.;
-    cout << endl << (-1/2.)*(pow(t,4) / 24. - M_PI / 4. * pow(t,3) / 6. + C_1_default*(-2)*t) << endl;
+    // t = M_PI / 2.;
+    // cout << endl << (-1/2.)*(pow(t,4) / 24. - M_PI / 4. * pow(t,3) / 6. + C_1_default*(-2)*t) << endl;
 
 	return 0;
 }
@@ -50,7 +51,7 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
     x[0].push_back(C1);
     x[0].push_back(0);
     x[0].push_back(C2);
-    cout << C1 << " " << C2 << endl;
+    // cout << C1 << " " << C2 << endl;
     
     // while(M_PI / 2. - pos > EPS) {
 
@@ -120,7 +121,7 @@ void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph) {
         pos += h;
         // cout << "pos " << pos << endl;
     } while (fin == 0);
-    cout << "out" << endl;
+    // cout << "out" << endl;
 }
 
 void shooting(double *C, double alph) { // method "ready"
@@ -128,7 +129,7 @@ void shooting(double *C, double alph) { // method "ready"
     vector<vector<double> > x_from_l;
     vector<vector<double> > x_from_r;
     vector<vector<double> > x;
-    double Jac_F[2][2], prev[2], a = 0;
+    double Jac_F[2][2], prev[2], a = 0, buf, det;
 
     C[0] = C_1_default;
     C[1] = C_2_default;
@@ -145,33 +146,49 @@ void shooting(double *C, double alph) { // method "ready"
             x_from_l.clear();
             x_from_r.clear();
 
-            RungeKutta(x_from_r, C[0] - EPS, C[1], a);
-            cout << "where are you?" << endl;
-            RungeKutta(x_from_l, C[0] + EPS, C[1], a);
-            cout << "here?" << endl;
-            Jac_F[0][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / EPS / 2.;
-            Jac_F[0][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / EPS / 2.;
+            RungeKutta(x_from_r, C[0] - DIFF, C[1], a);
+            // cout << "where are you?" << endl;
+            RungeKutta(x_from_l, C[0] + DIFF, C[1], a);
+            // cout << "here?" << endl;
+            Jac_F[0][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / DIFF / 2.;
+            Jac_F[0][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / DIFF / 2.;
 
             x_from_l.clear();
             x_from_r.clear();
 
-            RungeKutta(x_from_r, C[0], C[1] - EPS, a);
-            RungeKutta(x_from_l, C[0], C[1] + EPS, a);
-            Jac_F[1][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / EPS / 2.;
-            Jac_F[1][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / EPS / 2.;
+            RungeKutta(x_from_r, C[0], C[1] - DIFF, a);
+            RungeKutta(x_from_l, C[0], C[1] + DIFF, a);
+            Jac_F[1][0] = (x_from_l[x_from_l.size() - 1][0] - x_from_r[x_from_r.size() - 1][0]) / DIFF / 2.;
+            Jac_F[1][1] = (x_from_l[x_from_l.size() - 1][2] - x_from_r[x_from_r.size() - 1][2]) / DIFF / 2.;
 
-            invJac(Jac_F);
+            // invJac(Jac_F);
+
+            det = Jac_F[0][0]*Jac_F[1][1] - Jac_F[0][1]*Jac_F[1][0];
+            buf = Jac_F[0][0];
+
+            Jac_F[0][0] = Jac_F[1][1] / det;
+            Jac_F[0][1] *= -1 / det;
+            Jac_F[1][0] *= -1 / det;
+            Jac_F[1][1] = buf / det;
+
             RungeKutta(x, C[0], C[1], a);
 
-            C[0] -= Jac_F[0][0]*x[x.size() - 1][0] + Jac_F[0][1]*x[x.size() - 1][2];
-            C[1] -= Jac_F[1][0]*x[x.size() - 1][0] + Jac_F[1][1]*x[x.size() - 1][2];
+            C[0] -= Jac_F[0][0]*(x[x.size() - 1][0] - 1) + Jac_F[0][1]*x[x.size() - 1][2];
+            C[1] -= Jac_F[1][0]*(x[x.size() - 1][0] - 1) + Jac_F[1][1]*x[x.size() - 1][2];
+
+            cout << C[0] << " " << C[1] << endl;
         } while(sqrt((C[0] - prev[0])*(C[0] - prev[0]) + (C[1] - prev[1])*(C[1] - prev[1])) > 1e-10);
     }
+    x.clear();
+    x_from_l.clear();
+    x_from_r.clear();
 }
 
 void invJac(double J[2][2]) {
     double buf;
-
+    // cout << "hi" << endl;
+    // cout << J[0][0] << endl;
+    // cout << "hello" << endl;
     buf = J[0][0];
 
     J[0][0] = J[1][1];

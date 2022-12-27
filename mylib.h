@@ -7,6 +7,7 @@
 #include "MyVector.h"
 
 #define EPS 1e-3
+#define DIFF 1e-5
 #define C_1_default -(pow(M_PI, 4) / 384. - 2) / M_PI// -----//-----
 #define C_2_default -1 * M_PI / 4. // начальные значения, которые надо рассчитать
 #define ALPHA 0
