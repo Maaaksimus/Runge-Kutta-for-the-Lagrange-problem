@@ -12,7 +12,7 @@ MyVector::MyVector(double xx, double yy, double zz, double ww)
 }
 MyVector::MyVector(const MyVector &v)
 {
-	x[0] = v.x[0]; x[1] = v.x[1]; x[2] = v.x[2];
+	x[0] = v.x[0]; x[1] = v.x[1]; x[2] = v.x[2], x[3] = v.x[3];
 }
 
 void MyVector::print() {
@@ -21,7 +21,7 @@ void MyVector::print() {
 
 double operator*(const MyVector &a, const MyVector &b)
 {
-	return a.x[0]*b.x[0] + a.x[1]*b.x[1] + a.x[2]*b.x[2];
+	return a.x[0]*b.x[0] + a.x[1]*b.x[1] + a.x[2]*b.x[2] + a.x[3]*b.x[3];
 }
 
 MyVector operator+(const MyVector &a, const MyVector &b)
