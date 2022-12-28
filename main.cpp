@@ -95,7 +95,7 @@ void shooting(double *C, double alph) { // method "ready"
             C[0] -= Jac_F[0][0]*(X_curr[X_curr.size() - 1].x[0] - 1) + Jac_F[0][1]*X_curr[X_curr.size() - 1].x[2];
             C[1] -= Jac_F[1][0]*(X_curr[X_curr.size() - 1].x[0] - 1) + Jac_F[1][1]*X_curr[X_curr.size() - 1].x[2];
 
-            cout << C[0] << " " << C[1] << endl;
+            // cout << C[0] << " " << C[1] << endl;
         } while(sqrt((C[0] - prev[0])*(C[0] - prev[0]) + (C[1] - prev[1])*(C[1] - prev[1])) > 1e-7);
     }
 
