@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <ios>
 
-#define EPS 1e-15
+#define EPS 1e-13
 #define DIFF 1e-10
 // #define M_PI 3.14159265358979323846 как наладить точность?
 #define C_1_default -(pow(M_PI, 4) / 384. - 2) / M_PI// -----//-----
@@ -20,14 +20,10 @@
 using namespace std;
 
 MyVector f(MyVector k, double alph);
-void countK(MyVector *k, double h, MyVector y, double alph);
-MyVector vec2Vec(vector<double> v);
 
 MyVector countStep(double h, MyVector y, double alph);
 double L(MyVector x_curr, MyVector x_next, double alph);
 
-void RungeKutta(vector<vector<double> > &x, double C1, double C2, double alph, vector<double> &H);
-void RungeKutta2(vector<MyVector> &X, double C1, double C2, double alph, vector<double> &H);
+void RungeKutta(vector<MyVector> &X, double C1, double C2, double alph, vector<double> &H);
 
 void shooting(double *C, double alph);
-void invJac(double J[2][2]);
