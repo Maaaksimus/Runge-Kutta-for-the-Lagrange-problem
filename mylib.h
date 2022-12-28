@@ -5,9 +5,13 @@
 #include <cmath>
 #include <fstream>
 #include "MyVector.h"
+#include <stdio.h> // надо потом убрать
+#include <iomanip>
+#include <ios>
 
-#define EPS 1e-3
-#define DIFF 1e-5
+#define EPS 1e-8
+#define DIFF 1e-10
+// #define M_PI 3.14159265358979323846 как наладить точность?
 #define C_1_default -(pow(M_PI, 4) / 384. - 2) / M_PI// -----//-----
 #define C_2_default -1 * M_PI / 8. // начальные значения, которые надо рассчитать
 #define ALPHA 0
