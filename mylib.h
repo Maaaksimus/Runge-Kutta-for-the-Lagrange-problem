@@ -11,9 +11,11 @@
 
 #define EPS 1e-8
 #define DIFF 1e-10
-// #define M_PI 3.14159265358979323846 как наладить точность?
-#define C_1_default -(pow(M_PI, 4) / 384. - 2) / M_PI// -----//-----
-#define C_2_default -1 * M_PI / 8. // начальные значения, которые надо рассчитать
+#define gig 3.14159265358979323846 // как наладить точность?
+// #define C_1_default -(pow(gig, 4) / 384. - 2) / gig// -----//-----
+#define C_1_default 0.5558742601793006
+#define C_2_default -0.3926990816987242
+// #define C_2_default -1 * gig / 8. // начальные значения, которые надо рассчитать
 #define ALPHA 0
 #define K 32
 
