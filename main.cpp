@@ -343,3 +343,8 @@ MyVector countStep(double h, MyVector y, double alph) {
 }
 
 double L(MyVector x_curr, MyVector x_next, double alph) {
+    double x = (1./2.)*(x_curr.x[0] + x_next.x[0]);
+    double x_pp = (1./2.)*(x_curr.x[2] + x_next.x[2]);
+    
+    return x_pp*x_pp + x*exp((-1)*alph*x*x);
+}
