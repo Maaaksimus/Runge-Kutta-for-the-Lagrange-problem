@@ -5,28 +5,36 @@ int main() {
     vector<double> h;
 	vector<vector<double> > x;
     vector<MyVector> X;
-	double C[2], alph = ALPHA, t, s = 0, pos = 0;
+	double C[2], t, s = 0, pos = 0;
 
-	shooting(C, alph);
-    cout << C[0] << " " << C[1] << endl;
-    // cout << "C at the start: " << C_1_default << " " << C_2_default << endl;
-    // RungeKutta(X, C_1_default, C_2_default, alph, h);
-    RungeKutta(X, C[0], C[1], alph, h);
+    for (int alph = -5; alph < 21; alph ++) {
+        cout << "alpha = " << alph << endl;
+        X.clear();
+        h.clear();
+        s = 0;
 
-    for (int i = 0; i < X.size() - 1; i ++) {
-        // s += (0.5 * (x[i][0] + x[i + 1][0]) + pow(0.5 * (x[i][2] + x[i + 1][2]), 2)) * h[i];
-        // x1 << pos << " " << x[i][0] << endl;
-        // x3 << pos << " " << x[i][2] << endl;
-        // t = pos;
-        // t_x1 << pos << " " << (-1/2.)*(pow(t,4) / 24. - M_PI_4 * pow(t,3) / 6. + C_1_default*(-2)*t) << endl;
-        // t_x3 << pos << " " << (-1/2.)*(pow(t,2) / 2. - M_PI_4 * t) << endl;
-        // pos += h[i];
-        s += L(X[i], X[i+1], alph) * h[i];
+        shooting(C, alph);
+        // cout << C[0] << " " << C[1] << endl;
+        // cout << "C at the start: " << C_1_default << " " << C_2_default << endl;
+        // RungeKutta(X, C_1_default, C_2_default, alph, h);
+        RungeKutta(X, C[0], C[1], alph, h);
+
+        for (int i = 0; i < X.size() - 1; i ++) {
+            // s += (0.5 * (x[i][0] + x[i + 1][0]) + pow(0.5 * (x[i][2] + x[i + 1][2]), 2)) * h[i];
+            // x1 << pos << " " << x[i][0] << endl;
+            // x3 << pos << " " << x[i][2] << endl;
+            // t = pos;
+            // t_x1 << pos << " " << (-1/2.)*(pow(t,4) / 24. - M_PI_4 * pow(t,3) / 6. + C_1_default*(-2)*t) << endl;
+            // t_x3 << pos << " " << (-1/2.)*(pow(t,2) / 2. - M_PI_4 * t) << endl;
+            // pos += h[i];
+            s += L(X[i], X[i+1], alph) * h[i];
+        }
+
+        cout << "in 0: "; X[0].print();
+        cout << "in pi/2: "; X[X.size() - 1].print();
+        cout.precision(8);
+        cout << "Int: " << s << endl;
     }
-
-    cout << "in 0: "; X[0].print();
-    cout << "in pi/2: "; X[X.size() - 1].print();
-    cout << "Int: " << s << endl;
     // t = M_PI / 2.;
     // cout << (-1/2.)*(pow(t,3) / 6. - M_PI / 4. * pow(t,2) / 2. + C_1_default*(-2)) << endl;
 
@@ -54,7 +62,7 @@ void shooting(double *C, double alph) { // method "ready"
     for (int i = 1; i < 10; i ++) {
 
         a = alph / 9. * i;
-        cout << "a: " << a << endl;
+        // cout << "a: " << a << endl;
         
         do {
             prev[0] = C[0];

@@ -16,6 +16,7 @@ MyVector::MyVector(const MyVector &v)
 }
 
 void MyVector::print() {
+	std::cout.precision(8);
 	std::cout << "[" << x[0] << ", " << x[1] << ", " << x[2] << ", " << x[3] << "]" << std::endl;
 }
 
